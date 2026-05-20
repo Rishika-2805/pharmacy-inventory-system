@@ -1,0 +1,18 @@
+1. Start MongoDB Replica Set
+Open PowerShell:
+
+& "C:\Program Files\MongoDB\Server\8.0\bin\mongod.exe" --dbpath "C:\data\db" --replSet rs0
+
+2. Start Backend Server
+Open new terminal:
+
+cd server
+npm install
+npm run dev
+
+3. Start Frontend
+Open another terminal:
+
+cd client
+npm install
+npm run dev
