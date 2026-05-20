@@ -1,7 +1,12 @@
 1. Start MongoDB Replica Set
-Open PowerShell:
+Open PowerShell as administrator:
 
 & "C:\Program Files\MongoDB\Server\8.0\bin\mongod.exe" --dbpath "C:\data\db" --replSet rs0
+
+new terminal :
+mongosh
+rs.initate();
+rs.status();
 
 2. Start Backend Server
 Open new terminal:
