@@ -1,15 +1,19 @@
 import { useState } from "react";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate }
+from "react-router-dom";
 
 import API from "../api/axios";
 
 
 function Register() {
 
-    const navigate = useNavigate();
+    const navigate =
+    useNavigate();
 
-    const [formData, setFormData] = useState({
+
+    const [formData, setFormData] =
+    useState({
 
         name: "",
 
@@ -17,40 +21,50 @@ function Register() {
 
         password: "",
 
-        role: "store_manager"
+        role: "user"
     });
 
 
     const handleChange = (e) => {
 
         setFormData({
+
             ...formData,
-            [e.target.name]: e.target.value
+
+            [e.target.name]:
+            e.target.value
         });
     };
 
 
-    const handleSubmit = async (e) => {
+    const handleSubmit =
+    async (e) => {
 
         e.preventDefault();
 
         try {
 
             await API.post(
+
                 "/auth/register",
+
                 formData
             );
 
-            alert("Registration Successful");
+            alert(
+                "Registration Successful"
+            );
 
             navigate("/");
 
         } catch(error){
 
             alert(
-  error?.response?.data?.message ||
-  "Something went wrong"
-);
+
+                error?.response?.data?.message ||
+
+                "Something went wrong"
+            );
         }
     };
 
@@ -98,40 +112,43 @@ function Register() {
                 />
 
 
-            <select
-    name="role"
-    className="w-full border p-3 mb-4 rounded"
-    onChange={handleChange}
->
+                {/* ROLE SELECT */}
 
-    <option value="user">
+                <select
+                    name="role"
+                    value={formData.role}
+                    onChange={handleChange}
+                    className="w-full border p-3 mb-4 rounded"
+                >
 
-        User
+                    <option value="user">
 
-    </option>
+                        User
 
-
-    <option value="admin">
-
-        Admin
-
-    </option>
+                    </option>
 
 
-    <option value="store_manager">
+                    <option value="admin">
 
-        Store Manager
+                        Admin
 
-    </option>
+                    </option>
 
 
-    <option value="warehouse_manager">
+                    <option value="store_manager">
 
-        Warehouse Manager
+                        Store Manager
 
-    </option>
+                    </option>
 
-</select>
+
+                    <option value="warehouse_manager">
+
+                        Warehouse Manager
+
+                    </option>
+
+                </select>
 
 
                 <button
