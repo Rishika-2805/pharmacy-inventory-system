@@ -24,19 +24,55 @@ exports.addMedicine = async (req, res) => {
 
 
 // GET ALL MEDICINES
-exports.getMedicines = async (req, res) => {
+exports.getMedicines =
+async (req, res) => {
 
     try {
 
-        const medicines = await Medicine.find()
-.populate("storeId");
+        let medicines;
 
-        res.status(200).json(medicines);
+        // USER INFO
+        const user =
+        req.user;
+
+
+        // STORE MANAGER
+
+        if(
+            user.role ===
+            "store_manager"
+        ){
+
+            medicines =
+            await Medicine.find({
+
+                storeId:
+                user.storeId
+            })
+            .populate("storeId");
+        }
+
+
+        // ADMIN OR OTHERS
+
+        else {
+
+            medicines =
+            await Medicine.find()
+            .populate("storeId");
+        }
+
+
+        res.status(200).json(
+            medicines
+        );
 
     } catch(error){
 
         res.status(500).json({
-            message: error.message
+
+            message:
+            error.message
         });
     }
 };

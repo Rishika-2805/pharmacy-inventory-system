@@ -1,4 +1,8 @@
 const jwt = require("jsonwebtoken");
+const user =
+await User.findById(
+    decoded.id
+);
 
 exports.protect = async (req, res, next) => {
 
@@ -21,7 +25,7 @@ exports.protect = async (req, res, next) => {
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        req.user = decoded;
+        req.user = user;
 
         next();
 

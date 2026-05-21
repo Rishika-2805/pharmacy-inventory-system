@@ -4,7 +4,8 @@ const router = express.Router();
 
 const {
     buyMedicine,
-    getMyOrders
+    getMyOrders,
+    getStoreSales
 } = require(
     "../controllers/orderController"
 );
@@ -15,7 +16,6 @@ const {
     "../middleware/authMiddleware"
 );
 
-
 // USER PURCHASE
 router.post(
     "/buy",
@@ -23,6 +23,15 @@ router.post(
     buyMedicine
 );
 
+// STORE SALES HISTORY
+router.get(
+
+    "/sales-history",
+
+    protect,
+
+    getStoreSales
+);
 
 // USER ORDER HISTORY
 router.get(

@@ -18,11 +18,31 @@ const userSchema = new mongoose.Schema(
         required: true
     },
 
-    role: {
-        type: String,
-        enum: ["admin", "user" , "store_manager", "warehouse_manager"],
-        default: "user"
-    }
+   role: {
+
+    type: String,
+
+    enum: [
+
+        "admin",
+
+        "user",
+
+        "store_manager",
+
+        "warehouse_manager"
+    ],
+
+    default: "user"
+},
+
+storeId: {
+
+    type:
+    mongoose.Schema.Types.ObjectId,
+
+    ref: "Store"
+}
 },
 {
     timestamps: true

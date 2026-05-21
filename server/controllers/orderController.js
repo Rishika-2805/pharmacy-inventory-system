@@ -85,3 +85,68 @@ exports.getMyOrders = async (
         });
     }
 };
+
+// STORE SALES HISTORY
+
+exports.getStoreSales =
+async (req, res) => {
+
+    try {
+
+        let orders;
+
+        // STORE MANAGER
+
+        if(
+            req.user.role ===
+            "store_manager"
+        ){
+
+            orders =
+            await Order.find({
+
+                store:
+                req.user.storeId
+            })
+
+            .populate("medicine")
+
+            .populate("user")
+
+            .sort({
+                createdAt: -1
+            });
+        }
+
+
+        // ADMIN
+
+        else {
+
+            orders =
+            await Order.find()
+
+            .populate("medicine")
+
+            .populate("user")
+
+            .populate("store")
+
+            .sort({
+                createdAt: -1
+            });
+        }
+
+        res.status(200).json(
+            orders
+        );
+
+    } catch(error){
+
+        res.status(500).json({
+
+            message:
+            error.message
+        });
+    }
+};
