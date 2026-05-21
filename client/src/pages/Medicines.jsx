@@ -234,34 +234,34 @@ function Medicines() {
 
 
                 {/* STORE SELECT */}
+<select
+    name="storeId"
+    value={formData.storeId}
+    onChange={handleChange}
+    className="border p-3 rounded"
+>
 
-                <select
-                    name="storeId"
-                    className="border p-3 rounded"
-                    onChange={handleChange}
-                >
+    <option value="">
 
-                    <option>
+        Select Store
 
-                        Select Store
+    </option>
 
-                    </option>
+    {
+        stores.map((store) => (
 
-                    {
-                        stores.map((store) => (
+            <option
+                key={store._id}
+                value={store._id}
+            >
 
-                            <option
-                                key={store._id}
-                                value={store._id}
-                            >
+                {store.name}
 
-                                {store.name}
+            </option>
+        ))
+    }
 
-                            </option>
-                        ))
-                    }
-
-                </select>
+</select>
 
 
                 <button
