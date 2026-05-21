@@ -27,6 +27,8 @@ import Stores from "./pages/Stores";
 
 import Transfers from "./pages/Transfers";
 
+import SalesHistory
+from "./pages/SalesHistory";
 function App() {
 
   return (
@@ -142,6 +144,10 @@ function App() {
 
     </RoleProtectedRoute>
   }
+/>
+<Route
+    path="/sales-history"
+    element={<SalesHistory />}
 />
 
       </Routes>

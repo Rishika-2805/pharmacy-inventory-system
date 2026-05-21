@@ -126,14 +126,14 @@ function Sidebar() {
                             </Link>
 
 
-                            <Link
-                                to="/shop"
-                                className="block hover:text-blue-400"
-                            >
+            <Link
+            to="/sales-history"
+            className="block py-2 px-4 hover:bg-gray-700 rounded"
+        >
 
-                                Sales Portal
+            Sales History
 
-                            </Link>
+        </Link>
 
                         </>
                     )
