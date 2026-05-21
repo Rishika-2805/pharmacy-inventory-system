@@ -20,7 +20,8 @@ const { Server } = require("socket.io");
 
 const io = new Server(server, {
     cors: {
-        origin: "*"
+        origin: "https://pharmacy-inventory-system-tan.vercel.app",
+        methods: ["GET", "POST"]
     }
 });
 
@@ -42,7 +43,10 @@ app.set("io", io);
 
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: "https://pharmacy-inventory-system-tan.vercel.app",
+    credentials: true
+}));
 
 app.use(express.json());
 
