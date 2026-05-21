@@ -29,39 +29,9 @@ async (req, res) => {
 
     try {
 
-        let medicines;
-
-        // USER INFO
-        const user =
-        req.user;
-
-
-        // STORE MANAGER
-
-        if(
-            user.role ===
-            "store_manager"
-        ){
-
-            medicines =
-            await Medicine.find({
-
-                storeId:
-                user.storeId
-            })
-            .populate("storeId");
-        }
-
-
-        // ADMIN OR OTHERS
-
-        else {
-
-            medicines =
-            await Medicine.find()
-            .populate("storeId");
-        }
-
+        const medicines =
+        await Medicine.find()
+        .populate("storeId");
 
         res.status(200).json(
             medicines
