@@ -3,12 +3,16 @@ from "react";
 
 import API from "../api/axios";
 
+import { useNavigate }
+from "react-router-dom";
 
 function SalesHistory() {
 
     const [sales, setSales] =
     useState([]);
-
+    
+    const navigate =
+useNavigate();
 
     const fetchSales =
     async () => {
@@ -40,8 +44,20 @@ function SalesHistory() {
 
 
     return (
+        
 
         <div className="p-6">
+            <button
+    onClick={() =>
+        navigate("/dashboard")
+    }
+
+    className="mb-4 bg-red-500 text-white px-4 py-2 rounded"
+>
+
+    Close
+
+</button>
 
             <h1 className="text-3xl font-bold mb-6">
 
