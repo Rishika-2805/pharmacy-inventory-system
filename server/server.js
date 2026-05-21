@@ -44,8 +44,9 @@ app.set("io", io);
 
 // Middleware
 app.use(cors({
-    origin: "https://pharmacy-inventory-system-tan.vercel.app",
-    credentials: true
+  origin: "https://pharmacy-inventory-system-tan.vercel.app",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
 }));
 
 app.use(express.json());
