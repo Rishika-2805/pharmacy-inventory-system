@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-    baseURL: " https://pharmacy-inventory-system-a1mw.onrender.com/api"
+    baseURL: "https://pharmacy-inventory-system-a1mw.onrender.com/api"
 });
 
 
