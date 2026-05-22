@@ -1,49 +1,58 @@
 const mongoose = require("mongoose");
 
-const Medicine = require("../models/Medicine");
+const Medicine =
+require("../models/Medicine");
 
-const Order = require("../models/Order");
+const Order =
+require("../models/Order");
 
 const TransactionLog =
 require("../models/TransactionLog");
 
 
 // PURCHASE MEDICINE
-exports.purchaseMedicine = async (
-    purchaseData
-) => {
+exports.purchaseMedicine =
+async (purchaseData) => {
 
     const session =
-        await mongoose.startSession();
+    await mongoose.startSession();
 
     session.startTransaction();
 
     const transactionId =
-        new mongoose.Types.ObjectId().toString();
+    new mongoose.Types.ObjectId().toString();
 
     try {
 
         const {
+
             userId,
+
             medicineId,
+
             quantity
+
         } = purchaseData;
 
 
         // PREPARE PHASE
         await TransactionLog.create({
+
             transactionId,
+
             action: "prepare",
+
             status: "success",
+
             details: purchaseData
         });
 
 
         // FIND MEDICINE
         const medicine =
-            await Medicine.findById(
-                medicineId
-            ).session(session);
+        await Medicine.findById(
+            medicineId
+        ).session(session);
 
 
         if(!medicine){
@@ -55,7 +64,9 @@ exports.purchaseMedicine = async (
 
 
         // CHECK STOCK
-        if(medicine.quantity < quantity){
+        if(
+            medicine.quantity < quantity
+        ){
 
             throw new Error(
                 "Insufficient stock"
@@ -67,69 +78,73 @@ exports.purchaseMedicine = async (
         medicine.quantity -= quantity;
 
         await medicine.save({
+
             session
         });
 
-        const order =
-await Order.create({
 
-    user: userId,
-
-    medicine: medicine._id,
-
-    store: medicine.storeId,
-
-    quantity,
-
-    totalPrice:
-    medicine.price * quantity
-});
-
-        
         // LOW STOCK CHECK
-if(medicine.quantity < 80){
+        if(medicine.quantity < 80){
 
-    const Notification =
-    require("../models/Notification");
+            const Notification =
+            require(
+                "../models/Notification"
+            );
 
-    await Notification.create({
+            await Notification.create({
 
-        title: "Low Stock Alert",
+                title:
+                "Low Stock Alert",
 
-        message:
-            `${medicine.name} is running low in stock`,
+                message:
+                `${medicine.name} is running low in stock`,
 
-        type: "low_stock",
+                type: "low_stock",
 
-        store: medicine.storeId,
+                store:
+                medicine.storeId,
 
-        medicine: medicine._id
-    });
-}
+                medicine:
+                medicine._id
+            });
+        }
+
 
         // CREATE ORDER
         const order =
-            await Order.create(
-            [{
-                user: userId,
-                medicine: medicineId,
-                store: medicine.storeId,
-                quantity,
-                totalPrice:
-                    medicine.price * quantity,
-                status: "completed"
-            }],
-            { session }
+        await Order.create(
+        [{
+            user: userId,
+
+            medicine:
+            medicineId,
+
+            store:
+            medicine.storeId,
+
+            quantity,
+
+            totalPrice:
+            medicine.price * quantity,
+
+            status:
+            "completed"
+        }],
+        { session }
         );
 
 
-        // COMMIT
+        // COMMIT TRANSACTION
         await session.commitTransaction();
 
         await TransactionLog.create({
+
             transactionId,
+
             action: "commit",
+
             status: "success",
+
             details: purchaseData
         });
 
@@ -137,8 +152,11 @@ if(medicine.quantity < 80){
         session.endSession();
 
         return {
+
             success: true,
+
             transactionId,
+
             order
         };
 
@@ -148,11 +166,17 @@ if(medicine.quantity < 80){
         await session.abortTransaction();
 
         await TransactionLog.create({
+
             transactionId,
+
             action: "rollback",
+
             status: "failed",
+
             details: {
-                error: error.message
+
+                error:
+                error.message
             }
         });
 
@@ -160,9 +184,9 @@ if(medicine.quantity < 80){
 
         return {
 
-    success: true,
+            success: false,
 
-    order
-};
+            error: error.message
+        };
     }
 };
