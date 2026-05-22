@@ -70,6 +70,21 @@ exports.purchaseMedicine = async (
             session
         });
 
+        const order =
+await Order.create({
+
+    user: userId,
+
+    medicine: medicine._id,
+
+    store: medicine.storeId,
+
+    quantity,
+
+    totalPrice:
+    medicine.price * quantity
+});
+
         
         // LOW STOCK CHECK
 if(medicine.quantity < 80){
@@ -144,8 +159,10 @@ if(medicine.quantity < 80){
         session.endSession();
 
         return {
-            success: false,
-            error: error.message
-        };
+
+    success: true,
+
+    order
+};
     }
 };
