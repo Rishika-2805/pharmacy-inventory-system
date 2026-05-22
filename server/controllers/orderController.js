@@ -14,47 +14,59 @@ exports.buyMedicine = async (
     try {
 
         const result =
-            await purchaseMedicine({
+        await purchaseMedicine({
 
-                userId: req.user.id,
+            userId: req.user.id,
 
-                medicineId:
-                    req.body.medicineId,
+            medicineId:
+            req.body.medicineId,
 
-                quantity:
-                    req.body.quantity
-            });
+            quantity:
+            req.body.quantity
+        });
 
 
         if(!result.success){
 
             return res.status(400).json({
-                message: result.error
+
+                message:
+                result.error
             });
         }
 
 
         // REAL-TIME UPDATE
-        const io = req.app.get("io");
+        const io =
+        req.app.get("io");
 
-        io.emit("inventoryUpdated", {
-            message:
+        io.emit(
+            "inventoryUpdated",
+            {
+                message:
                 "Medicine purchased",
-            transactionId:
+
+                transactionId:
                 result.transactionId
-        });
+            }
+        );
 
 
         res.status(200).json({
+
             message:
-                "Medicine purchased successfully",
-            order: result.order
+            "Medicine purchased successfully",
+
+            order:
+            result.order
         });
 
     } catch(error){
 
         res.status(500).json({
-            message: error.message
+
+            message:
+            error.message
         });
     }
 };
@@ -70,72 +82,52 @@ exports.getMyOrders = async (
     try {
 
         const orders =
-            await Order.find({
-                user: req.user.id
-            })
-            .populate("medicine")
-            .populate("store");
+        await Order.find({
 
-        res.status(200).json(orders);
+            user:
+            req.user.id
+        })
+
+        .populate("medicine")
+
+        .populate("store");
+
+
+        res.status(200).json(
+            orders
+        );
 
     } catch(error){
 
         res.status(500).json({
-            message: error.message
+
+            message:
+            error.message
         });
     }
 };
 
-// STORE SALES HISTORY
 
+
+// STORE SALES HISTORY
 exports.getStoreSales =
 async (req, res) => {
 
     try {
 
-        let orders;
+        const orders =
+        await Order.find()
 
-        // STORE MANAGER
+        .populate("medicine")
 
-        if(
-            req.user.role ===
-            "store_manager"
-        ){
+        .populate("user")
 
-            orders =
-            await Order.find({
+        .populate("store")
 
-                store:
-                req.user.storeId
-            })
+        .sort({
+            createdAt: -1
+        });
 
-            .populate("medicine")
-
-            .populate("user")
-
-            .sort({
-                createdAt: -1
-            });
-        }
-
-
-        // ADMIN
-
-        else {
-
-            orders =
-            await Order.find()
-
-            .populate("medicine")
-
-            .populate("user")
-
-            .populate("store")
-
-            .sort({
-                createdAt: -1
-            });
-        }
 
         res.status(200).json(
             orders
